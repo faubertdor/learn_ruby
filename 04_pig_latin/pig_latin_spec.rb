@@ -67,6 +67,16 @@ describe "#translate" do
 
   # Test-driving bonus:
   # * write a test asserting that capitalized words are still capitalized (but with a different initial capital letter, of course)
+  describe "#translate with capitalize" do
+    it "translate capitalized words and retain capitalization" do
+      translate("Jean").should == "Eanjay"
+      translate("Apple").should == "Appleay"
+    end
   # * retain the punctuation from the original phrase
-
+    it "#translate retain the original puntuation" do
+      s = translate("Is that a wonderful day? Yes for coding!")
+      s.should == "Isay atthay aay onderfulway ayday? Esyay orfay odingcay!"
+    end
+  end
+  
 end
