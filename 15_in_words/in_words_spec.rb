@@ -64,6 +64,8 @@ describe Fixnum do
 
   it "reads various other numbers less than 100" do
     20.in_words.should == 'twenty'
+    29.in_words.should == 'twenty nine'
+    45.in_words.should == 'forty five'
     77.in_words.should == 'seventy seven'
     99.in_words.should == 'ninety nine'
   end
@@ -81,15 +83,21 @@ describe Fixnum do
 
   it "reads thousands" do
     1000.in_words.should == 'one thousand'
+    10001.in_words.should == 'ten thousand one'
+    12000.in_words.should == 'twelve thousand'
     32767.in_words.should == 'thirty two thousand seven hundred sixty seven'
     32768.in_words.should == 'thirty two thousand seven hundred sixty eight'
+    55231.in_words.should == 'fifty five thousand two hundred thirty one'
   end
 
   it "reads millions" do
     10_000_001.in_words.should == 'ten million one'
+    200_222_000.in_words.should == 'two hundred million two hundred twenty two thousand'
   end
 
   it "reads billions" do
+    1_000_000_000.in_words.should == 'one billion'
+    1_200_000_000.in_words.should == 'one billion two hundred million'
     1_234_567_890.in_words.should == 'one billion two hundred thirty four million five hundred sixty seven thousand eight hundred ninety'
   end
 
