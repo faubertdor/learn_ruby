@@ -4,10 +4,10 @@ class Fixnum
   
   def in_words
     self.word = ""
-    self.irregulars = [3, 5, 8]
-    self.num_0_to_9 = { 0 => "zero", 1 => "one", 2 => "two", 3 => "three", 4 => "four",
-                        5 => "five", 6 => "six", 7 => "seven", 8 => "eight", 9 => "nine" }
-    self.num_10_to_12 = { 10 => "ten", 11 => "eleven", 12 => "twelve" }
+    self.irregulars   =   [3, 5, 8]
+    self.num_0_to_9   =   { 0 => "zero", 1 => "one", 2 => "two", 3 => "three", 4 => "four",
+                            5 => "five", 6 => "six", 7 => "seven", 8 => "eight", 9 => "nine" }
+    self.num_10_to_12 =   { 10 => "ten", 11 => "eleven", 12 => "twelve" }
     
     case self
       when 0..999
@@ -83,11 +83,8 @@ class Fixnum
       else
         postfix = ""
         case remainder
-        when 1..99
-          postfix = zero_to_99(remainder)
-          self.word << postfix
-        when 100..999
-          postfix = one_hundred_to_999(remainder)
+        when 1..999
+          postfix = zero_to_999(remainder)
           self.word << postfix
         when 1000..999_999
           one_thousand_and_up(remainder, 1000)
