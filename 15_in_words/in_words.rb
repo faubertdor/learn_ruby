@@ -7,14 +7,8 @@ class Fixnum
     case self
       when 0..999
         zero_to_999(self)
-      when 1000..99999
-        one_thousand_and_up(self, 1000, word)
-      when 1_000_000..999_999_999
-        one_thousand_and_up(self, 1_000_000, word)
-      when 1_000_000_000..999_999_999_999
-        one_thousand_and_up(self, 1_000_000_000, word)
-      when 1_000_000_000_000..999_999_999_999_999
-        one_thousand_and_up(self, 1_000_000_000_000, word)
+      when 1000..999_999_999_999_999
+        one_thousand_and_up(self, word)
     end
   end
   
@@ -91,15 +85,22 @@ class Fixnum
     end
     
     # Reads everything after a 999
-    # Unit can be 1000, 1000,...
-    def one_thousand_and_up(num, unit, word)
-      quotient = num / unit
-      remainder = num % unit
+    # Base can be 1000, 1 000 000,...
+    def one_thousand_and_up(num, word)
+      base = 1
+      quotient = num / base
+      remainder = num % base
       quotient_in_words = ""
       
-      # 1 <= quotien <= 999 
+      # 1 <= quotien <= 999
+      while quotient < 1 || quotient > 999
+        base *= 1000
+        quotient = num / base
+        remainder = num % base
+      end
+      
       quotient_in_words = zero_to_999(quotient)
-      word += quotient_in_words + "#{unit_in_word(unit)}"
+      word += quotient_in_words + "#{base_in_word(base)}"
       
       if remainder == 0
         word[-1] = ""
@@ -110,12 +111,8 @@ class Fixnum
         when 1..999
           postfix = zero_to_999(remainder)
           word << postfix
-        when 1000..999_999
-          word = one_thousand_and_up(remainder, 1000, word)
-        when 1_000_000..999_999_999
-          word = one_thousand_and_up(remainder, 1_000_000, word)
-        when 1_000_000_000..999_999_999_999
-          word = one_thousand_and_up(remainder, 1_000_000_000, word)
+        when 1000..999_999_999_999
+          word = one_thousand_and_up(remainder, word)
         end
       end
     end
@@ -157,9 +154,9 @@ class Fixnum
       end
     end
     
-    # Returns the word for each unit
+    # Returns the word for each base
     # 1000, 1 000 000 and up!
-    def unit_in_word(unit)
+    def base_in_word(unit)
       case unit
         when 1000
           " thousand "
@@ -195,4 +192,4 @@ class Fixnum
           
 end
 
-puts 273.in_words
+puts 232497494123473.in_words
