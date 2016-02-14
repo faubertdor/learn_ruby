@@ -1,25 +1,20 @@
 # Reopen the Fixnum class to add the method in_words
 class Fixnum
-  attr_accessor :irregulars, :word, :num_0_to_9, :num_10_to_12
-  
+ 
   def in_words
-    self.word = ""
-    self.irregulars   =   [3, 5, 8]
-    self.num_0_to_9   =   { 0 => "zero", 1 => "one", 2 => "two", 3 => "three", 4 => "four",
-                            5 => "five", 6 => "six", 7 => "seven", 8 => "eight", 9 => "nine" }
-    self.num_10_to_12 =   { 10 => "ten", 11 => "eleven", 12 => "twelve" }
-    
+    word = ""
+        
     case self
       when 0..999
         zero_to_999(self)
       when 1000..99999
-        one_thousand_and_up(self, 1000)
+        one_thousand_and_up(self, 1000, word)
       when 1_000_000..999_999_999
-        one_thousand_and_up(self, 1_000_000)
+        one_thousand_and_up(self, 1_000_000, word)
       when 1_000_000_000..999_999_999_999
-        one_thousand_and_up(self, 1_000_000_000)
+        one_thousand_and_up(self, 1_000_000_000, word)
       when 1_000_000_000_000..999_999_999_999_999
-        one_thousand_and_up(self, 1_000_000_000_000)
+        one_thousand_and_up(self, 1_000_000_000_000, word)
     end
   end
   
@@ -27,12 +22,40 @@ class Fixnum
   private
     # 0 to 9
     def zero_to_nine(num)
-      num_0_to_9[num]
+      case num
+        when 0
+          "zero"
+        when 1
+          "one"
+        when 2
+          "two"
+        when 3
+          "three"
+        when 4
+          "four"
+        when 5
+          "five"
+        when 6
+          "six"
+        when 7
+          "seven"
+        when 8
+          "eight"
+        when 9
+          "nine"
+      end
     end
     
     # 10 to 12
     def ten_to_twelve(num)
-      num_10_to_12[num]
+      case num
+        when 10
+          "ten"
+        when 11
+          "eleven"
+        when 12
+          "twelve"
+      end
     end
     
     # 13 to 19
@@ -49,13 +72,14 @@ class Fixnum
     
     # 20 to 90
     def twenty_to_ninety_nine(num)
-      self.irregulars << 4
-      self.irregulars << 2
+      irreg_arr = irregulars
+      irreg_arr << 4
+      irreg_arr << 2
       word = ""
       quotient = num / 10
       remainder = num % 10
       
-      if irregulars.include?(quotient)
+      if irreg_arr.include?(quotient)
         word = irregular_case(quotient)
       else
         word = zero_to_nine(quotient)
@@ -68,30 +92,30 @@ class Fixnum
     
     # Reads everything after a 999
     # Unit can be 1000, 1000,...
-    def one_thousand_and_up(num, unit)
+    def one_thousand_and_up(num, unit, word)
       quotient = num / unit
       remainder = num % unit
       quotient_in_words = ""
       
       # 1 <= quotien <= 999 
       quotient_in_words = zero_to_999(quotient)
-      self.word += quotient_in_words + "#{unit_in_word(unit)}"
+      word += quotient_in_words + "#{unit_in_word(unit)}"
       
       if remainder == 0
-        self.word[-1] = ""
+        word[-1] = ""
         word
       else
         postfix = ""
         case remainder
         when 1..999
           postfix = zero_to_999(remainder)
-          self.word << postfix
+          word << postfix
         when 1000..999_999
-          one_thousand_and_up(remainder, 1000)
+          word = one_thousand_and_up(remainder, 1000, word)
         when 1_000_000..999_999_999
-          one_thousand_and_up(remainder, 1_000_000)
+          word = one_thousand_and_up(remainder, 1_000_000, word)
         when 1_000_000_000..999_999_999_999
-          one_thousand_and_up(remainder, 1_000_000_000)
+          word = one_thousand_and_up(remainder, 1_000_000_000, word)
         end
       end
     end
@@ -148,6 +172,11 @@ class Fixnum
       end
     end
     
+    # Irregulars digits
+    def irregulars
+        [3, 5, 8]
+    end
+    
     # Irregular cases 3, 4, 5, 8, 20
     def irregular_case(num)
       case num
@@ -165,3 +194,5 @@ class Fixnum
     end
           
 end
+
+puts 273.in_words
